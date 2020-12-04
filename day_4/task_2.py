@@ -1,61 +1,44 @@
 import re
 
-eye_colors = [
-    'amb',
-    'blu',
-    'brn',
-    'gry',
-    'grn',
-    'hzl',
-    'oth']
-
 
 def checkBYR(byr):
-    if int(byr) < 1920 or int(byr) > 2002:
+    if re.match("^(19[2-9][0-9]|200[0-2])$", byr):
+        return True
+    else:
         print("Wrong byr: " + byr)
         return False
-    return True
 
 
 def checkIYR(iyr):
-    if int(int(iyr)) < 2010 or int(iyr) > 2020:
+    if re.match("^(201[0-9]|2020)$", iyr):
+        return True
+    else:
         print("Wrong iyr: " + iyr)
         return False
-    return True
 
 
 def checkEYR(eyr):
-    if int(eyr) < 2020 or int(eyr) > 2030:
+    if re.match("^(202[0-9]|2030)$", eyr):
+        return True
+    else:
         print("Wrong eyr: " + eyr)
         return False
-    return True
 
 
 def checkECL(ecl):
-    if any(ecl in s for s in eye_colors):
+    if re.match("^(amb|blu|brn|gry|grn|hzl|oth)$", ecl):
         return True
     else:
         print("Wrong ecl: " + ecl)
         return False
 
 
-def checkHeight(height):
-    suffix = height[-2:]
-    if suffix != "cm" and suffix != "in":
+def checkHeight(hgt):
+    if re.match("((1[5-8][0-9]|19[0-3])cm|^(59|6[0-9]|7[0-6])in)$", hgt):
+        return True
+    else:
+        print("Wrong hgt: " + hgt)
         return False
-
-    if(suffix == "cm"):
-        try:
-            return int(height[0:3]) >= 150 and int(height[0:3]) <= 193
-        except ValueError:
-            print("Wrong hgt: " + height)
-            return False
-    elif(suffix == "in"):
-        try:
-            return int(height[0:2]) >= 59 and int(height[0:2]) <= 76
-        except ValueError:
-            print("Wrong hgt: " + height)
-            return False
 
 
 def checkHCL(hcl):
@@ -74,7 +57,7 @@ def checkPID(pid):
         return False
 
 
-funct = {
+validate = {
     "byr": checkBYR,
     "iyr": checkIYR,
     "eyr": checkEYR,
@@ -92,7 +75,7 @@ def is_valid(passport):
         elif key == "cid":
             continue
         else:
-            if not funct[key](passport[key]):
+            if not validate[key](passport[key]):
                 return False
 
     return True
@@ -119,25 +102,19 @@ inputs = read_input("input.txt")
 formatted = []
 
 data = []
+count = 0
 for i, input in enumerate(inputs):
     if(input == "\n"):
-        formatted.append("".join(data))
-        data = []
+        info = "".join(data).replace("\n", " ").split()
+        passport = create_blank_passport()
+
+        for values in info:
+            values = values.split(":")
+            passport[values[0]] = values[1]
+
+        count += is_valid(passport)
+        data.clear()
     else:
         data.append(input)
-
-count = 0
-for info in formatted:
-    info = info.replace("\n", " ").split()
-
-    passport = create_blank_passport()
-
-    for values in info:
-        values = values.split(":")
-        key = values[0]
-        val = values[1]
-        passport[key] = val
-
-    count += is_valid(passport)
 
 print(count)
