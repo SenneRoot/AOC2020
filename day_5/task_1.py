@@ -22,8 +22,7 @@ def read_input(filename):
      with open(filename) as f:
          return [str(x) for x in f]
 
-inputs = read_input("input.txt")
 
-print(max(decode_seat_number(input.strip("\n")) for input in inputs))
-
-
+if __name__ == "__main__":
+    inputs = read_input("input.txt")
+    print(max(decode_seat_number(input.strip("\n")) for input in inputs))
