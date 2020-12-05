@@ -1,4 +1,4 @@
-from task_1 import *
+from task_1 import read_input, decode_seat_number
 
 if __name__ == "__main__":
     inputs = read_input("input.txt")
