@@ -1,9 +1,7 @@
 from task_1 import read_input, decode_seat_number
 
 if __name__ == "__main__":
-    inputs = read_input("input.txt")
-
-    seatsIDs = [decode_seat_number(input.strip("\n")) for input in inputs]
+    seatsIDs = [decode_seat_number(input.strip("\n")) for input in read_input("input.txt")]
 
     seatsIDs.sort()
     for i, seatid in enumerate(seatsIDs):
