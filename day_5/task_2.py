@@ -1,7 +1,5 @@
-import math
-
 def getHalf(min, max, topHalf):
-    middle = math.floor((min + max)  / 2)
+    middle = int((min + max)  / 2)
     if topHalf:
         return min, middle
     else:
@@ -26,7 +24,6 @@ def read_input(filename):
 
 inputs = read_input("input.txt")
 
-max = 0
 seatsIDs = [decode_seat_number(input.strip("\n")) for input in inputs]
 
 seatsIDs.sort()

@@ -1,7 +1,5 @@
-import math
-
 def getHalf(min, max, topHalf):
-    middle = math.floor((min + max)  / 2)
+    middle = int((min + max)  / 2)
     if topHalf:
         return min, middle
     else:
