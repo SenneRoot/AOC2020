@@ -8,23 +8,17 @@ def getHalf(min, max, topHalf):
         return middle + 1, max
 
 def decode_seat_number(seatString):
-    rowString = seatString[0:7]
-    colString = seatString[7:]
-
     minRow = 0
     maxRow = 127
-    for char in rowString:
+    for char in seatString[0:7]:
         minRow, maxRow = getHalf(minRow, maxRow, char == "F")
 
     maxSeat = 7
     minSeat = 0
-    for char in colString:
+    for char in seatString[7:]:
         minSeat, maxSeat = getHalf(minSeat, maxSeat, char == "L")
 
-    row = maxRow
-    seat = maxSeat
-
-    return 8 * row + seat
+    return 8 * maxRow + maxSeat
 
 def read_input(filename):
      with open(filename) as f:
@@ -32,11 +26,6 @@ def read_input(filename):
 
 inputs = read_input("input.txt")
 
-maxSeatID = 0
-for input in inputs:
-    seatID = decode_seat_number(input.strip("\n"))
-    if seatID > maxSeatID:
-        maxSeatID = seatID
+print(max(decode_seat_number(input.strip("\n")) for input in inputs))
 
-print(maxSeatID)
 
