@@ -1,6 +1,6 @@
 from task_1_dict import read_input, createBags
 
-def findBags(bagsToFind, bagsDict):
+def countBagsInside(bagsToFind, bagsDict):
     counter = 0
     # this time we dont use a set, because we need to count all occurences
     while len(bagsToFind):
@@ -16,6 +16,6 @@ def findBags(bagsToFind, bagsDict):
 
 if __name__ == "__main__":
     bagsDict = createBags(read_input("input.txt"))
-    count = findBags(["shiny gold"], bagsDict)
+    count = countBagsInside(["shiny gold"], bagsDict)
 
     print(count)
