@@ -12,10 +12,11 @@ def performInstruction(instruction, arg, instructionPointer, accumelator):
     elif instruction == "jmp":
         instructionPointer += arg
         return accumelator, instructionPointer
+    else:
+        print("Unsupported instruction!")
 
-if __name__ == "__main__":
-    instructions = read_input("input.txt")
 
+def findLoop(instructions):
     runnedInstructions = {}
     accumelator = 0
     instructionPointer = 0
@@ -30,7 +31,9 @@ if __name__ == "__main__":
 
         accumelator, instructionPointer = performInstruction(instruction, arg, instructionPointer, accumelator)
 
-    
-    print(accumelator)
+    return accumelator, instructionPointer
 
-    
+
+if __name__ == "__main__":
+    accumelator, instructionPointer = findLoop(read_input("input.txt"))
+    print(f"Found loop at: {instructionPointer} With accumulator value  of: {accumelator}")

@@ -1,18 +1,4 @@
-def read_input(filename):
-    return [str(x).rstrip() for x in open(filename)]
-
-def performInstruction(instruction, arg, instructionPointer, accumelator):
-    if instruction == "nop":
-        instructionPointer += 1
-        return accumelator, instructionPointer
-    elif instruction == "acc":
-        instructionPointer += 1
-        accumelator += arg
-        return accumelator, instructionPointer
-    elif instruction == "jmp":
-        instructionPointer += arg
-        return accumelator, instructionPointer
-
+from task_1 import read_input, performInstruction
 
 def test(instructions):
     instructionPointer = 0
@@ -22,26 +8,27 @@ def test(instructions):
         instruction, arg = instructions[instructionPointer].split(" ")
         arg = int(arg)
         if instructionPointer in runnedInstructions.keys():
-            return False
+            return False, accumelator
         else:
             runnedInstructions[instructionPointer] = instruction
 
         accumelator, instructionPointer = performInstruction(instruction, arg, instructionPointer, accumelator)
 
-    return True
+    return True, accumelator
 
-def force(instructions, ins):
+def force(instructions, ins, replace):
     # brute force that stuff
     for pos, val in ins.items():
-        print("trying: " + str(pos + 1) + " " + str(val))
-
         tmpIns = instructions.copy()
-        newIns = "nop +1"
-        tmpIns[pos] = newIns
+        tmpIns[pos] = replace + " " + tmpIns[pos].split(" ")[1]
 
-        if test(tmpIns):
-            print("Found a correct solve at line: " + str(pos+1)) 
+        print(f"Switching line: {pos + 1} {val} to {tmpIns[pos]}")
+        succes, result = test(tmpIns)
+        if succes:
+            print(f"Found a correct solve at line: {pos+1}, Acummelator value: {result}") 
             return True
+
+    print("No solution found!")
     return False
 
 
@@ -66,12 +53,12 @@ if __name__ == "__main__":
              
         instructionPointer += 1
 
-    if force(instructions, jmps):
-        print("found correct solve in jmp! See output above")
-    if force(instructions, nops):
+    if force(instructions, jmps, "nop"):
+        print("found a correct solve in jmp! See output above")
+    elif force(instructions, nops, "jmp"):
         print("found correct solve in nop! See output above")
 
-        
+         
 
 
     
