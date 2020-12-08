@@ -1,20 +1,4 @@
-from task_1 import read_input, performInstruction
-
-def test(instructions):
-    instructionPointer = 0
-    accumelator = 0
-    runnedInstructions = {}
-    while instructionPointer < len(instructions):
-        instruction, arg = instructions[instructionPointer].split(" ")
-        arg = int(arg)
-        if instructionPointer in runnedInstructions.keys():
-            return False, accumelator
-        else:
-            runnedInstructions[instructionPointer] = instruction
-
-        accumelator, instructionPointer = performInstruction(instruction, arg, instructionPointer, accumelator)
-
-    return True, accumelator
+from task_1 import read_input, performInstruction, findLoop
 
 def force(instructions, ins, replace):
     # brute force that stuff
@@ -22,10 +6,10 @@ def force(instructions, ins, replace):
         tmpIns = instructions.copy()
         tmpIns[pos] = replace + " " + tmpIns[pos].split(" ")[1]
 
-        print(f"Switching line: {pos + 1} {val} to {tmpIns[pos]}")
-        succes, result = test(tmpIns)
+        print(f"Switching line {pos + 1}: \"{val}\" to \"{tmpIns[pos]}\"")
+        succes, result, ins = findLoop(tmpIns)
         if succes:
-            print(f"Found a correct solve at line: {pos+1}, Acummelator value: {result}") 
+            print(f"Found a correct solve at line {pos+1}: Acummelator value: {result}") 
             return True
 
     print("No solution found!")
@@ -38,8 +22,8 @@ if __name__ == "__main__":
     instructionPointer = 0
     total = 0
 
-    jmps = {}
-    nops = {}
+    jmps = dict()
+    nops = dict()
 
     # get jmps and nops
     while instructionPointer < len(instructions):

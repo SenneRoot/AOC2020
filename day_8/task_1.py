@@ -3,37 +3,32 @@ def read_input(filename):
 
 def performInstruction(instruction, arg, instructionPointer, accumelator):
     if instruction == "nop":
-        instructionPointer += 1
-        return accumelator, instructionPointer
+        return accumelator, instructionPointer + 1
     elif instruction == "acc":
-        instructionPointer += 1
-        accumelator += arg
-        return accumelator, instructionPointer
+        return accumelator + arg, instructionPointer + 1
     elif instruction == "jmp":
-        instructionPointer += arg
-        return accumelator, instructionPointer
+        return accumelator, instructionPointer + arg
     else:
         print("Unsupported instruction!")
 
 
 def findLoop(instructions):
-    runnedInstructions = {}
+    runnedInstructions = dict()
     accumelator = 0
     instructionPointer = 0
     while instructionPointer < len(instructions):
         instruction, arg = instructions[instructionPointer].split(" ")
         arg = int(arg)
         if instructionPointer in runnedInstructions.keys():
-            print("We are looping at: " + instructions[instructionPointer])
-            break
+            return False, accumelator, instructionPointer
         else:
             runnedInstructions[instructionPointer] = instructions[instructionPointer]
 
         accumelator, instructionPointer = performInstruction(instruction, arg, instructionPointer, accumelator)
 
-    return accumelator, instructionPointer
+    return True, accumelator, instructionPointer
 
 
 if __name__ == "__main__":
-    accumelator, instructionPointer = findLoop(read_input("input.txt"))
+    result, accumelator, instructionPointer = findLoop(read_input("input.txt"))
     print(f"Found loop at: {instructionPointer} With accumulator value  of: {accumelator}")
