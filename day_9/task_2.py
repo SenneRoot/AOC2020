@@ -2,22 +2,21 @@ from task_1 import read_input
 
 
 def findContiguous(inputs, sumToFind):
-    i = 0
-    while i < len(inputs):
-        sumList = []
-        j = i + 1
-        sumList.append(inputs[i])
-        while j < len(inputs):
-            sumList.append(inputs[j])
-            if sum(sumList) == sumToFind:
+    for index, i in enumerate(inputs):
+        sums = i
+        index += 1        
+        sumList = list()
+        sumList.append(i)
+        for j in inputs[index:]:
+            sumList.append(j)
+            sums += j
+            if sums == sumToFind:
                 return sumList
-            j += 1
-        i += 1
+    
+    return []
             
 
 if __name__ == "__main__":
-    inputs = read_input("input.txt")
-
-    res = findContiguous(inputs, 3199139634)
+    res = findContiguous(read_input("input.txt"), 3199139634)
 
     print(min(res) + max(res))

@@ -3,25 +3,17 @@ def read_input(filename):
 
 
 def checkSums(inputs, number):
-    i = 0 
-    while i < len(inputs):
-        j = i + 1 
-        while j < len(inputs):
-            if j != i and (inputs[i] + inputs[j]) == number:
+    for index, i in enumerate(inputs):
+        index += 1
+        for j in inputs[index:]:
+            if i + j == number:
                 return True
-            j += 1
-        i += 1
     return False
 
 if __name__ == "__main__":
     inputs = read_input("input.txt")
-    
-    i = 0
-    while i < len(inputs):
-        test = inputs[i:i+25]
-        if not checkSums(test, inputs[i + 25]):
-            print(inputs[i + 25])
+    for index, i in enumerate(inputs):
+        test = inputs[index:index+25]
+        if not checkSums(test, inputs[(index + 25)]):
+            print(inputs[index + 25])
             break
-        else:
-            i += 1
-            pass
