@@ -1,7 +1,6 @@
 def read_input(filename):
     return [int(x) for x in open(filename)]
 
-
 def checkSums(inputs, number):
     for index, i in enumerate(inputs):
         index += 1
