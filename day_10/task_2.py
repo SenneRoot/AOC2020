@@ -6,10 +6,7 @@ def countArrangements(lines):
     paths = {0 : 1}
     # for every adapter count the possible ways to get to that adapter by adding the possible ways to get to the previous adapter
     for adapter in adapters:
-        if adapter in paths:
-            paths[adapter] += sum(paths[i] for i in range(adapter - 3, adapter) if i in paths)
-        else:
-            paths[adapter] = sum(paths[i] for i in range(adapter - 3, adapter) if i in paths)
+        paths[adapter] = sum(paths[i] for i in range(adapter - 3, adapter) if i in paths)
     return paths[adapters[-1]]
 
 
