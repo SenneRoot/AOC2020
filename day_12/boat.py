@@ -1,14 +1,14 @@
 class Boat:
     def __init__(self, turn):
-        # only keep track of N. E:  -N is S and -E is W
+        # Startin state, only keep track of N. E:  -N is S and -E is W
         self.state = {"N" : 0, "E" : 0, "F" : "E"}
-        # need to translate S -> N and W -> E
+        # need to translate instructions S -> N and W -> E
         self.instructions = {"N" : "N", "E" : "E", "S" : "N", "W" : "E"}
         # N and E are + and S and W are -
         self.move = {"N" : 1, "E" : 1, "S" : -1, "W" : -1}
         # turn for task one and two are inverted so ask for correct dict
         self.turn = turn
-        # this lsit is used for rotating
+        # this list is used for rotating
         self.direction = list(["N", "E", "S", "W"])
         self.wayPoint = {"N" : 1, "E" : 10, "S" : 0, "W" : 0}
 
@@ -24,23 +24,23 @@ class Boat:
     
     def performInstructionTask2(self, instruction, value):
         if instruction == "F":
-            #perform step value times
             for key in self.wayPoint.keys():
-                step = self.wayPoint[key] * value
-                self.state[self.instructions[key]] += step * self.move[key]
+                # move to the waypoint * value * direction(- or +)
+                self.state[self.instructions[key]] += self.wayPoint[key] * value * self.move[key]
         else:
             self.moveWaypoint(instruction, value)
 
     def moveWaypoint(self, instruction, value):
-        # rotate: e += n, s += e, , w += s, n += w
+        # rotate r: e = n, s = e, w = s, n = w
+        # rotate l: e = s, s = w, w = n, n = e
         if instruction == "L" or instruction == "R":
             newWaypoint = self.wayPoint.copy()
-            for i in range(0, int(value/90)):
-                for key in self.wayPoint.keys():
-                    newWaypoint[key] = self.wayPoint[self.direction[(self.direction.index(key) + self.turn[instruction]) % len(self.direction)]]
-                self.wayPoint = newWaypoint.copy()
+            for key in self.wayPoint.keys():
+                newWaypoint[key] = self.wayPoint[self.direction[((self.direction.index(key) + int(self.turn[instruction] * (value/90)))) % len(self.direction)]]
+                # assign rotated waypoint
+            self.wayPoint = newWaypoint
         else: #instruction = N, E, S, W
-                self.wayPoint[self.instructions[instruction]] += value * self.move[instruction]
+            self.wayPoint[self.instructions[instruction]] += value * self.move[instruction]
 
 
     def manhattanDis(self):
