@@ -1,45 +1,26 @@
 def read_input(filename):
     return [str(x).rstrip() for x in open(filename)]
 
-#boat = Boat()
-turn = {"R" : 1,
-        "L" : -1}
-
-opposite = {"N" : "S",
-            "E" : "W",
-            "S" : "N",
-            "W" : "E"}
-
-boatState = {"N" : 0,
-             "E" : 0,
-             "S" : 0,
-             "W" : 0,
-             "F" : "E"}
-
-direction = list(["N", "E", "S", "W"])
-
 class Boat:
-    def __init__(self, state):
-        self.state = state
+    def __init__(self):
+        self.state = {"N" : 0, "E" : 0, "F" : "E"}
+        self.instructions = {"N" : "N", "E" : "E", "S" : "N", "W" : "E"}
+        self.move = {"N" : 1, "E" : 1, "S" : -1, "W" : -1}
+        self.turn = {"R" : 1, "L" : -1}
+        self.direction = list(["N", "E", "S", "W"])
 
     def performInstruction(self, instruction, value):
         # turn
         if instruction == "L" or instruction == "R":
-            boatState["F"] = direction[(direction.index(boatState["F"]) + int((turn[instruction] * (value/90)))) % len(direction)]
+            self.state["F"] = self.direction[(self.direction.index(self.state["F"]) + int((self.turn[instruction] * (value/90)))) % len(self.direction)]
         elif instruction == "F":
-            # add the value to the opposite direction were facing if this diection 
-            if value < self.state[opposite[self.state[instruction]]]:
-                self.state[opposite[self.state[instruction]]] -= value
-            else:
-                self.state[self.state[instruction]] += value - self.state[opposite[self.state[instruction]]]
-                self.state[opposite[self.state[instruction]]] = 0
+            # add the value to the opposite direction were facing if this diection
+            self.state[self.instructions[self.state[instruction]]] += value * self.move[self.state[instruction]]
         else:
-            if value < self.state[opposite[instruction]]:
-                self.state[opposite[instruction]] -= value
-            else:
-                self.state[instruction] += (value - self.state[opposite[instruction]])
-                self.state[opposite[instruction]] = 0
-        
+            self.state[self.instructions[instruction]] += value * self.move[instruction]
+    
+    def manhattanDis(self):
+        return abs(self.state["N"]) + abs(self.state["E"])
 
 
 if __name__ == "__main__":
@@ -50,9 +31,9 @@ if __name__ == "__main__":
     for i, input in enumerate(inputs):
         instructions[i] = (input[:1], input[1:])
 
-    b = Boat(boatState.copy())
+    b = Boat()
 
     for instruction in instructions.values():
         b.performInstruction(instruction[0], int(instruction[1]))
 
-    print(abs(b.state["N"] - b.state["S"]) + abs(b.state["E"] - b.state["W"]))
+    print(b.manhattanDis())
