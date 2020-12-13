@@ -12,18 +12,17 @@ if __name__ == "__main__":
 
     closeDict = dict()
     for time in times:
-        closeDict[time] = [time * (target // time), time * math.ceil(target / time)]
+        closeDict[time] = time * math.ceil(target / time)
 
 
-    closest = 10000000000
+    closest = math.inf
     closestKey = 0
-    for key, times in closeDict.items():
-        for time in times:
-            if time < target:
-                continue
-            elif time - target < closest:
-                closest = time - target
-                closestKey = key
+    for key, time in closeDict.items():
+        if time < target:
+            continue
+        elif time - target < closest:
+            closest = time - target
+            closestKey = key
             
     
     print(closest * closestKey)
