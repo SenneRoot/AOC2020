@@ -20,34 +20,40 @@ def mask(m, addres):
 
     ret = []
     for combination in list(itertools.product([0, 1], repeat=len(floating))):
-        temp = res.copy()
         for i, val in enumerate(combination):
-            temp[floating[i]] = str(val)
-        ret.append("".join(temp))
-
+            res[floating[i]] = str(val)
+        ret.append("".join(res))
 
     return ret
 
 
-def writeMemory(inputs):
+def writeMemory(data):
     mem = dict()
     i = 0
-    while i < len(inputs):
-        m = inputs[i].split(" = ")[1]
-        for input in inputs[i + 1:]:
-            if "mask" in input:
-                break
-            addres = int(re.search("\[(.*?)\]", input).group(1))
-            value = int(input.split(" = ")[1])
-            
-            for add in mask(m, addres):
-                mem[add] = value
-            i += 1
-        i += 1
+    for i in data:
+        m = i[0].split(" = ")[1]
+        for j in i[1:]:
+            for add in mask(m, int(re.search("\[(.*?)\]", j).group(1))):
+                mem[add] = int(j.split(" = ")[1])
 
     return mem
 
+def formatInput(inputs):
+    data = []
+    temp = [inputs[0]]
+    for input in inputs[1:]:
+        if "mask" in input:
+            data.append(temp)
+            temp = [input]
+        else:
+            temp.append(input)
+
+    data.append(temp)
+    return data
+
 if __name__ == "__main__":
-    mem = writeMemory(read_input("input.txt"))
+    data = formatInput(read_input("input.txt"))
+
+    mem = writeMemory(data)
 
     print(sum(mem.values()))
