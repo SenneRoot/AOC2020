@@ -1,28 +1,27 @@
 import re
 from task_1 import read_input
-
 import itertools
 
 
 def mask(m, addres):
     binVal = format(addres, '036b')
     floating = list()
-    
-    res = []
+
+    maskResult = []
     for i, bit in enumerate(m):
         if bit == "0":
-            res += binVal[i]
+            maskResult += binVal[i]
         elif bit == "X":
             floating.append(i)
-            res += bit      
+            maskResult += bit
         else:
-            res += bit
+            maskResult += bit
 
     ret = []
     for combination in list(itertools.product([0, 1], repeat=len(floating))):
         for i, val in enumerate(combination):
-            res[floating[i]] = str(val)
-        ret.append("".join(res))
+            maskResult[floating[i]] = str(val)
+        ret.append("".join(maskResult))
 
     return ret
 
@@ -38,6 +37,7 @@ def writeMemory(data):
 
     return mem
 
+
 def formatInput(inputs):
     data = []
     temp = [inputs[0]]
@@ -51,8 +51,9 @@ def formatInput(inputs):
     data.append(temp)
     return data
 
+
 if __name__ == "__main__":
-    data = formatInput(read_input("input.txt"))
+    data = formatInput(read_input("test_input.txt"))
 
     mem = writeMemory(data)
 
