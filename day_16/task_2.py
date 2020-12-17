@@ -3,13 +3,14 @@ import math
 
 
 def findValues(yourTicket, nearByTickets, rules):
+    # initialize list with all possiblities
     possibleFields = {i: set(rules.keys()) for i in range(len(yourTicket))}
+    #we check 
     for ticket in nearByTickets:
-        if not checkRules(ticket, rules): # returns list of size 0 if valid
-            for i, val in enumerate(ticket):
-                for k, ranges in rules.items():
-                    if val not in ranges[0] and val not in ranges[1]:
-                        possibleFields[i].remove(k)
+        for i, val in enumerate(ticket):
+            for k, ranges in rules.items():
+                if val not in ranges[0] and val not in ranges[1]:
+                    possibleFields[i].remove(k)
 
     result = [None for x in possibleFields]
 
@@ -23,8 +24,9 @@ def findValues(yourTicket, nearByTickets, rules):
 if __name__ == "__main__":
     rules, yourTicket, nearByTickets = formatInput(read_input("input.txt"))
     
+    validNearby = []
     for nearByTicket in nearByTickets:
-       if checkRules(nearByTicket, rules):
-           nearByTickets.remove(nearByTicket)
+       if not checkRules(nearByTicket, rules):
+           validNearby.append(nearByTicket)
     
-    print(findValues(yourTicket, nearByTickets, rules))
+    print(findValues(yourTicket, validNearby, rules))
