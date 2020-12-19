@@ -3,7 +3,9 @@ import math
 
 
 def findValues(yourTicket, nearByTickets, rules):
+    # initialize list with all possiblities
     possibleFields = {i: set(rules.keys()) for i in range(len(yourTicket))}
+    #we check 
     for ticket in nearByTickets:
         for i, val in enumerate(ticket):
             for k, ranges in rules.items():
@@ -27,4 +29,4 @@ if __name__ == "__main__":
        if not checkRules(nearByTicket, rules):
            validTickets.append(nearByTicket)
     
-    print(findValues(yourTicket, validTickets, rules))
+
