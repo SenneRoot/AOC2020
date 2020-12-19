@@ -5,7 +5,7 @@ if __name__ == "__main__":
     initialState = getInitialState(inputs)
     nDim = 4
 
-    A = initialState.copy()[(...,) + (None,) * (4 - initialState.ndim)]
+    A = initialState.copy()[(...,) + (None,) * (nDim - initialState.ndim)]
     for i in range(6):
         A = evolve(A)
 
