@@ -25,6 +25,5 @@ if __name__ == "__main__":
     t = map(TheSpecialOne.eval, inputs)
     print("Part 1:", sum(t))
 
-       
 
 

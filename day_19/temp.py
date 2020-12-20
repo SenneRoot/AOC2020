@@ -1,8 +1,11 @@
-from collections import deque 
-import networkx as nx
 import re
 
-import matplotlib.pyplot as plt
+import click
+import networkx as nx
+import regex
+
+import utils
+
 
 def add_rule(graph, rule, skip=None):
     number, rule = rule.split(':')
@@ -12,8 +15,7 @@ def add_rule(graph, rule, skip=None):
 
     rule = rule.strip().split(' ')
 
-    # handle a or b
-    if re.search("[ab]", rule[0]):
+    if len(rule) == 1 and rule[0].startswith('"'):
         # Remove quotes for leaf nodes
         graph.add_node(number, rule=rule[0].strip('"'))
     else:
@@ -42,23 +44,14 @@ def resolve(graph):
             graph.nodes[node]['rule'] = ''.join(rule)
 
 
+@click.group()
+def cli():
+    pass
 
 
-def read_input(filename):
-    return [str(x).rstrip() for x in open(filename)]
-
-def formatData(inputs):
-    rules = inputs[:inputs.index("")]
-    input = inputs[inputs.index("")+1:]
-
-
-    return rules, input
-
-if __name__ == "__main__":
-    inputs = read_input("input.txt")
-
-    rules, input = formatData(inputs)
-
+@cli.command()
+def part_1():
+    rules, messages = utils.get_input(__file__, cast=str, delimiter='\n', line_delimiter='\n\n')
     graph = nx.DiGraph()
 
     for rule in rules:
@@ -67,14 +60,27 @@ if __name__ == "__main__":
     resolve(graph)
 
     rule_0 = graph.nodes['0']['rule']
-    t = [message for message in input if re.fullmatch(rule_0, message)]
-    print(len([message for message in input if re.fullmatch(rule_0, message)]))
+    print(len([message for message in messages if re.fullmatch(rule_0, message)]))
 
 
-    nx.draw(graph,with_labels=True)
-    plt.draw()
-    plt.show()
+@cli.command()
+def part_2():
+    rules, messages = utils.get_input(__file__, cast=str, delimiter='\n', line_delimiter='\n\n')
+    graph = nx.DiGraph()
 
-       
+    for rule in rules:
+        # Skip rules 0, 8, and 11; we manually handle those
+        graph = add_rule(graph, rule, skip={'0', '8', '11'})
+
+    resolve(graph)
+
+    rule_31 = graph.nodes['31']['rule']
+    rule_42 = graph.nodes['42']['rule']
+
+    # Use a recursive regex here
+    rule_0 = fr'(?:{rule_42})+((?:{rule_42})(|(?1))(?:{rule_31}))'
+    print(len([message for message in messages if regex.fullmatch(rule_0, message)]))
 
 
+if __name__ == '__main__':
+    cli()

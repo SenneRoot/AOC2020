@@ -3,6 +3,7 @@ import re
 
 def convert(matchobj):
     return f"TheSecondSpecialOne({matchobj.group(0)})"
+    
 class TheSecondSpecialOne(int):
     def __add__(self, other):
         return TheSecondSpecialOne(int(self) * int(other))
